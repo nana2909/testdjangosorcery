@@ -14,41 +14,41 @@ Base = declarative_base()
 Session = sessionmaker(bind=engine)
 Session.configure(bind=engine)
 
-metadata = MetaData()
+#metadata = MetaData()
 
 class PartItem(Base):
-    __tablename__ = 'parts'
+    __tablename__ = 'partitems'
 
-    part_id = Column(INTEGER, primary_key=True)
+    part_id = Column(INTEGER, primary_key=True,autoincrement=True)
     description = Column(String)
     series_num = Column(INTEGER)
-    car_id = Column(INTEGER, ForeignKey("cars.car_id"), primary_key=True)
+    car_id = Column(INTEGER, ForeignKey("cars.car_id"))
 
 class Car(Base):
     __tablename__ = 'cars'
 
-    car_id = Column(INTEGER,primary_key=True)
+    car_id = Column(INTEGER,primary_key=True,autoincrement=True)
     make = Column(String)
     model = Column(String)
     year = Column(String)
     parts = relationship(PartItem, uselist=True, primaryjoin=(car_id == PartItem.car_id))
 
-Base.metadata.drop_all(bind=engine)
+# Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
-metadata.create_all(bind=engine)
+#metadata.create_all(bind=engine)
 
 session = Session()
 
-for i in range(0, 50):
-    car = Car(car_id=i, make='Toyota', model='Prius', year='2014')
-    part = PartItem(car_id=i, part_id=i + 1, description='Engine',
-                series_num=random.randint(0, 1000))
-    session.add(car)
-    session.add(part)
+# for i in range(0, 20):
+#     car = Car(make='Toyota', model='Prius', year='2014')
+#     part = PartItem(car_id=i+1,description='Engine',
+#                 series_num=random.randint(0, 1000))
+#     session.add(car)
+#     session.add(part)
 
-session.commit()
+# session.commit() 
 
-class SessionMixin(object):
-    def __init__(self, *args, **kwargs):
-        self.session = Session()
-        super(SessionMixin, self).__init__(*args, **kwargs)
+# class SessionMixin(object):
+#     def __init__(self, *args, **kwargs):
+#         self.session = Session()
+#         super(SessionMixin, self).__init__(*args, **kwargs)

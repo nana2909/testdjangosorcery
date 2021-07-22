@@ -1,16 +1,32 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 from example import views
 
-# Create a router and register our viewsets with it.
 
 car_list = views.CarViewSet.as_view({
     'get': 'list',
     'post': 'create'
 })
-# The API URLs are now determined automatically by the router.
+
+car_detail = views.CarViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+part_list = views.PartItemViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+part_detail = views.PartItemViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
 urlpatterns = [
-    # path('cars', views.CarList.as_view()),
-    # path('parts', views.PartItemList.as_view()),
     path('cars/', car_list, name='car-list'),
+    path('cars/<int:pk>/', car_detail, name='car-detail'),
+    path('parts/', part_list, name='part-list'),
+    path('parts/<int:pk>/', part_detail, name='part-detail'),
+
 ]
